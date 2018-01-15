@@ -1,0 +1,29 @@
+{
+  "name": "markdown-it-spellcheck",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Check spelling in markdown files (markdown-it plugin)",
+  "keywords": [
+    "markdown",
+    "markdown-it",
+    "markdown-it-plugin",
+    "spell",
+    "spell-check",
+    "spelling"
+  ],
+  "license": "MIT",
+  "author": "Matthew Tylee Atkinson",
+  "main": "index.js",
+  "scripts": {
+    "precommit": "npm test",
+    "test": "eslint . && node test.js"
+  },
+  "dependencies": {
+    "spellchecker": "~3.4"
+  },
+  "devDependencies": {
+    "eslint": "~4.15",
+    "husky": "~0.14",
+    "markdown-it": "~8.4"
+  }
+}
