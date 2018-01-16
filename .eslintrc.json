@@ -1,6 +1,7 @@
 {
   "env": {
     "es6": true,
+    "jest": true,
     "node": true
   },
   "extends": "eslint:recommended",
@@ -25,6 +26,7 @@
     "new-cap": "error",
     "no-bitwise": "error",
     "no-caller": "error",
+    "no-cond-assign": "warn",
     "no-console": "off",
     "no-else-return": "error",
     "no-eq-null": "error",
@@ -80,7 +82,6 @@
       "error",
       "inside"
     ],
-    "yoda": "error",
-    "no-cond-assign": "warn"
+    "yoda": "error"
   }
 }
