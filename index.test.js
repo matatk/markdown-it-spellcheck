@@ -59,6 +59,24 @@ describe('options-checking', () => {
 		}).not.toThrow()
 	})
 
+	it('throws if options.log is not a function', () => {
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				log: 42
+			})
+		}).toThrow(Error('Log callback is not a function.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				log: () => {}
+			})
+		}).not.toThrow()
+	})
+
 	it('throws if options.filter is not a function', () => {
 		expect(() => {
 			require('markdown-it')().use(require('./'), {
@@ -76,25 +94,93 @@ describe('options-checking', () => {
 			})
 		}).not.toThrow()
 	})
+
+	it('throws if validWords is not an array', () => {
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				validWords: 42
+			})
+		}).toThrow(Error('validWords is not an array.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				validWords: []
+			})
+		}).toThrow(Error('validWords array is empty.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				validWords: ['forty-two']
+			})
+		}).not.toThrow()
+	})
+
+	it('throws if warnWords is not an array', () => {
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				warnWords: 42
+			})
+		}).toThrow(Error('warnWords is not an array.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				warnWords: []
+			})
+		}).toThrow(Error('warnWords array is empty.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				warnWords: ['forty-two']
+			})
+		}).not.toThrow()
+	})
 })
 
-describe('basic functionality', () => {
-	let md
-
-	beforeEach(() => {
-		md = require('markdown-it')().use(require('./'), {
+describe('basic rendering', () => {
+	it('renders properly', () => {
+		const md = require('markdown-it')().use(require('./'), {
 			errors: () => {},
 			warnings: () => {}
 		})
-	})
-
-	test('renders properly', () => {
 		expect(md.render('# Test')).toBe('<h1>Test</h1>\n')
 	})
+})
 
-	test('throws on an invalid spelling', () => {
-		expect(() => {
-			md.render('# Spellrite')
-		}).toThrow()
+describe('spell-checking', () => {
+	it("doesn't call mocks when everything's spelled correctly", () => {
+		const errorsMock = jest.fn()
+		const warningsMock = jest.fn()
+		const md = require('markdown-it')().use(require('./'), {
+			errors: errorsMock,
+			warnings: warningsMock
+		})
+		expect(md.render('# Test')).toBe('<h1>Test</h1>\n')
+		expect(errorsMock.mock.calls.length).toBe(0)
+		expect(warningsMock.mock.calls.length).toBe(0)
+	})
+
+	test('flags spelling errors', () => {
+		const errorsMock = jest.fn()
+		const warningsMock = jest.fn()
+		const md = require('markdown-it')().use(require('./'), {
+			errors: errorsMock,
+			warnings: warningsMock
+		})
+		md.render('# Spellrite')
+		expect(errorsMock.mock.calls.length).toBe(1)
+		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
+		expect(warningsMock.mock.calls.length).toBe(0)
 	})
 })
