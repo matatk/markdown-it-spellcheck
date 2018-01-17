@@ -1,6 +1,10 @@
 'use strict'
 const SpellChecker = require('spellchecker')
 
+function capitaliseFirst(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 function handleSpellingErrors(text, filter, warnWords, errorsAsWarnings, warn) {
 	const preprocessed = filter ? filter(text) : text
 	const resultWords = incorrectlySpelledWords(preprocessed)
@@ -62,16 +66,19 @@ module.exports = (md, options) => {
 		throw Error('Non-object options specified.')
 	}
 
+	// FIXME remove
 	if (Object.keys(options).length === 0) {
 		throw Error('No errors callback specified.')
 	}
 
-	if (options.hasOwnProperty('errors')) {
-		if (typeof options['errors'] !== 'function') {
-			throw Error('Errors callback is not a function.')
+	for (const option of ['errors', 'warnings']) {
+		if (options.hasOwnProperty(option)) {
+			if (typeof options[option] !== 'function') {
+				throw Error(`${capitaliseFirst(option)} callback is not a function.`)
+			}
+		} else {
+			throw Error(`No ${option} callback specified.`)
 		}
-	} else {
-		throw Error('No errors callback specified.')
 	}
 
 	// Set-up...

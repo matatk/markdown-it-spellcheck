@@ -17,18 +17,44 @@ describe('options-checking', () => {
 
 	it('throws when no errors callback is specified', () => {
 		expect(() => {
-			require('markdown-it')().use(require('./'), {})
+			require('markdown-it')().use(require('./'), {
+				warnings: () => {}
+			})
 		}).toThrow(Error('No errors callback specified.'))
 
 		expect(() => {
 			require('markdown-it')().use(require('./'), {
+				warnings: () => {},
 				errors: 42
 			})
 		}).toThrow(Error('Errors callback is not a function.'))
 
 		expect(() => {
 			require('markdown-it')().use(require('./'), {
+				warnings: () => {},
 				errors: () => {}
+			})
+		}).not.toThrow()
+	})
+
+	it('throws when no warnings callback is specified', () => {
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {}
+			})
+		}).toThrow(Error('No warnings callback specified.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: 42
+			})
+		}).toThrow(Error('Warnings callback is not a function.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {}
 			})
 		}).not.toThrow()
 	})
@@ -39,7 +65,8 @@ describe('basic functionality', () => {
 
 	beforeEach(() => {
 		md = require('markdown-it')().use(require('./'), {
-			errors: () => {}
+			errors: () => {},
+			warnings: () => {}
 		})
 	})
 
