@@ -1,6 +1,4 @@
 'use strict'
-// TODO can't test spellings being added to the word list on macOS due to
-//      https://github.com/atom/node-spellchecker/issues/22
 
 describe('options-checking', () => {
 	it('throws when no options are specified', () => {
@@ -159,25 +157,28 @@ describe('basic rendering', () => {
 })
 
 describe('spell-checking', () => {
-	it("doesn't call mocks when everything's spelled correctly", () => {
-		const errorsMock = jest.fn()
-		const warningsMock = jest.fn()
-		const md = require('markdown-it')().use(require('./'), {
+	// TODO can't test spellings being added to the word list on macOS due to
+	//      https://github.com/atom/node-spellchecker/issues/22
+	let md
+	let errorsMock
+	let warningsMock
+
+	beforeEach(() => {
+		errorsMock = jest.fn()
+		warningsMock = jest.fn()
+		md = require('markdown-it')().use(require('./'), {
 			errors: errorsMock,
 			warnings: warningsMock
 		})
+	})
+
+	it("doesn't call mocks when everything's spelled correctly", () => {
 		expect(md.render('# Test')).toBe('<h1>Test</h1>\n')
 		expect(errorsMock.mock.calls.length).toBe(0)
 		expect(warningsMock.mock.calls.length).toBe(0)
 	})
 
 	test('flags spelling errors', () => {
-		const errorsMock = jest.fn()
-		const warningsMock = jest.fn()
-		const md = require('markdown-it')().use(require('./'), {
-			errors: errorsMock,
-			warnings: warningsMock
-		})
 		md.render('# Spellrite')
 		expect(errorsMock.mock.calls.length).toBe(1)
 		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
