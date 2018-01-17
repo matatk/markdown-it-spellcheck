@@ -1,9 +1,31 @@
 'use strict'
 const SpellChecker = require('spellchecker')
 
+function checkOptions(options) {
+	if (options === undefined) {
+		throw Error('No options specified.')
+	}
+
+	if (typeof options !== 'object') {
+		throw Error('Non-object options specified.')
+	}
+
+	for (const option of ['errors', 'warnings']) {
+		if (options.hasOwnProperty(option)) {
+			if (typeof options[option] !== 'function') {
+				throw Error(`${capitaliseFirst(option)} callback is not a function.`)
+			}
+		} else {
+			throw Error(`No ${option} callback specified.`)
+		}
+	}
+}
+
+
 function capitaliseFirst(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1)
 }
+
 
 function handleSpellingErrors(text, filter, warnWords, errorsAsWarnings, warn) {
 	const preprocessed = filter ? filter(text) : text
@@ -58,28 +80,7 @@ function warnGuard(options, condition, name) {
 
 
 module.exports = (md, options) => {
-	if (options === undefined) {
-		throw Error('No options specified.')
-	}
-
-	if (typeof options !== 'object') {
-		throw Error('Non-object options specified.')
-	}
-
-	// FIXME remove
-	if (Object.keys(options).length === 0) {
-		throw Error('No errors callback specified.')
-	}
-
-	for (const option of ['errors', 'warnings']) {
-		if (options.hasOwnProperty(option)) {
-			if (typeof options[option] !== 'function') {
-				throw Error(`${capitaliseFirst(option)} callback is not a function.`)
-			}
-		} else {
-			throw Error(`No ${option} callback specified.`)
-		}
-	}
+	checkOptions(options)
 
 	// Set-up...
 
