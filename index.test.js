@@ -165,8 +165,6 @@ describe('basic rendering', () => {
 })
 
 describe('spell-checking', () => {
-	// TODO can't test spellings being added to the word list on macOS due to
-	//      https://github.com/atom/node-spellchecker/issues/22
 	let md
 	let errorsMock
 	let warningsMock
@@ -208,5 +206,36 @@ describe('filtering', () => {
 		// expect(md.render('# Spellrite')).toBe('<h1>Spell correctly</h1>\n')
 		md.render('# Spellrite')
 		expect(errorsMock.mock.calls.length).toBe(0)
+	})
+})
+
+describe('valid words and warning words', () => {
+	// TODO can't test spellings being added to the word list on macOS due to
+	//      https://github.com/atom/node-spellchecker/issues/22
+	/* it('treats valid words as valid', () => {
+		const errorsMock = jest.fn()
+		const warningsMock = jest.fn()
+		const md = require('markdown-it')().use(require('./'), {
+			errors: errorsMock,
+			warnings: warningsMock,
+			validWords: ['Spellrite']
+		})
+		md.render('# Spellrite')
+		expect(errorsMock.mock.calls.length).toBe(0)
+		expect(warningsMock.mock.calls.length).toBe(0)
+	})*/
+
+	it('flags warning words as warnings instead of errors', () => {
+		const errorsMock = jest.fn()
+		const warningsMock = jest.fn()
+		const md = require('markdown-it')().use(require('./'), {
+			errors: errorsMock,
+			warnings: warningsMock,
+			warnWords: ['Spellrite']
+		})
+		md.render('# Spellrite')
+		expect(errorsMock.mock.calls.length).toBe(0)
+		expect(warningsMock.mock.calls.length).toBe(1)
+		expect(warningsMock.mock.calls[0][0]).toEqual(['Spellrite'])
 	})
 })

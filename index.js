@@ -60,10 +60,10 @@ function handleSpellingErrors(text, filter, warnWords, error, warn) {
 		// Some mis-spellings may have been flagged by the user as warnings
 		// rather than errors (this was put in place to allow language-based
 		// mis-spellings through).
-		const warningWords = resultWords.filter(
-			word => warnWords.includes(word))
-		const errantWords = resultWords.filter(
-			word => !warnWords.includes(word))
+		const warningWords =
+			resultWords.filter(word => warnWords.includes(word))
+		const errantWords =
+			resultWords.filter(word => !warnWords.includes(word))
 
 		if (errantWords.length > 0) {
 			error(errantWords)
