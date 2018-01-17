@@ -54,6 +54,26 @@ function warnGuard(options, condition, name) {
 
 
 module.exports = (md, options) => {
+	if (options === undefined) {
+		throw Error('No options specified.')
+	}
+
+	if (typeof options !== 'object') {
+		throw Error('Non-object options specified.')
+	}
+
+	if (Object.keys(options).length === 0) {
+		throw Error('No errors callback specified.')
+	}
+
+	if (options.hasOwnProperty('errors')) {
+		if (typeof options['errors'] !== 'function') {
+			throw Error('Errors callback is not a function.')
+		}
+	} else {
+		throw Error('No errors callback specified.')
+	}
+
 	// Set-up...
 
 	const filter = checkForSetKey(options, 'filter') ? options.filter : null
