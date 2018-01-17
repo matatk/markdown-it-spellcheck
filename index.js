@@ -1,7 +1,58 @@
 'use strict'
 const SpellChecker = require('spellchecker')
 
-function handleSpellingErrors(text, filter, warnWords, errorsAsWarnings, warn) {
+function checkOptions(options) {
+	if (options === undefined) {
+		throw Error('No options specified.')
+	}
+
+	if (typeof options !== 'object') {
+		throw Error('Non-object options specified.')
+	}
+
+	const optionsRequired = {
+		// Which options must be present?
+		'errors': true,
+		'warnings': true,
+		'log': false,
+		'filter': false
+	}
+
+	for (const option in optionsRequired) {
+		if (options.hasOwnProperty(option)) {
+			// Everything other than options.log must be a function if present;
+			// options.log can be null or a function (so it's easy to set
+			// declaratively in the options object when the plugin is loaded).
+			if (option !== 'log'
+				&& typeof options[option] !== 'function') {
+				throw Error(`${capitalise(option)} callback is not a function.`)
+			} else if (option === 'log'
+				&& options.log !== null && typeof options.log !== 'function') {
+				throw Error('Log callback is neither null nor a function.')
+			}
+		} else if (optionsRequired[option]) {
+			throw Error(`No ${option} callback specified.`)
+		}
+	}
+
+	for (const wordList of ['validWords', 'warnWords']) {
+		if (options.hasOwnProperty(wordList)) {
+			if (!Array.isArray(options[wordList])) {
+				throw Error(`${wordList} is not an array.`)
+			} else if (options[wordList].length === 0) {
+				throw Error(`${wordList} array is empty.`)
+			}
+		}
+	}
+}
+
+
+function capitalise(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+
+function handleSpellingErrors(text, filter, warnWords, error, warn) {
 	const preprocessed = filter ? filter(text) : text
 	const resultWords = incorrectlySpelledWords(preprocessed)
 
@@ -9,17 +60,13 @@ function handleSpellingErrors(text, filter, warnWords, errorsAsWarnings, warn) {
 		// Some mis-spellings may have been flagged by the user as warnings
 		// rather than errors (this was put in place to allow language-based
 		// mis-spellings through).
-		const warningWords = resultWords.filter(
-			word => warnWords.includes(word))
-		const errantWords = resultWords.filter(
-			word => !warnWords.includes(word))
+		const warningWords =
+			resultWords.filter(word => warnWords.includes(word))
+		const errantWords =
+			resultWords.filter(word => !warnWords.includes(word))
 
 		if (errantWords.length > 0) {
-			if (errorsAsWarnings) {
-				warn(errantWords)
-			} else {
-				throw Error(errantWords)
-			}
+			error(errantWords)
 		}
 
 		if (warningWords.length > 0) {
@@ -41,50 +88,32 @@ function incorrectlySpelledWords(text) {
 }
 
 
-function checkForSetKey(object, key) {
-	return object && object.hasOwnProperty(key) && object[key]
-}
-
-
-function warnGuard(options, condition, name) {
-	if (condition && !options.warn) {
-		console.log(`Caution: options.${name} is set, but an options.warn function has not been provided; warnings will not be shown.`)
-	}
-}
-
-
 module.exports = (md, options) => {
 	// Set-up...
 
-	const filter = checkForSetKey(options, 'filter') ? options.filter : null
+	checkOptions(options)
 
-	const errorsAsWarnings = checkForSetKey(options, 'errorsAsWarnings') ?
-		Boolean(options.errorsAsWarnings) : false
-
-	const warn = checkForSetKey(options, 'warn') ? options.warn : () => {}
-
-	warnGuard(options, errorsAsWarnings, 'errorsAsWarnings')
-
-	const log = checkForSetKey(options, 'log') ? options.log : () => {}
-
-	if (checkForSetKey(options, 'validWords')) {
-		for (const word of options.validWords) {
-			SpellChecker.add(word)
-			log(`Added to custom dictionary: ${word}`)
-		}
-	}
-
-	const warnWords = checkForSetKey(options, 'warnWords') ?
+	const log = options.hasOwnProperty('log') && options.log ?
+		options.log : () => {}
+	const filter = options.hasOwnProperty('filter') ?
+		options.filter : null
+	const validWords = options.hasOwnProperty('validWords') ?
+		options.validWords : []
+	const warnWords = options.hasOwnProperty('warnWords') ?
 		options.warnWords : []
+
+	for (const word of validWords) {
+		SpellChecker.add(word)
+		log(`Added to custom dictionary: ${word}`)
+	}
 
 	for (const word of warnWords) {
 		log(`Added word to warning list: ${word}`)
 	}
 
-	warnGuard(options, warnWords.length > 0, 'warnWords')
-
 	function check(text) {
-		handleSpellingErrors(text, filter, warnWords, errorsAsWarnings, warn)
+		handleSpellingErrors(
+			text, filter, warnWords, options.errors, options.warnings)
 	}
 
 

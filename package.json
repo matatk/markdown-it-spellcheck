@@ -16,7 +16,7 @@
   "main": "index.js",
   "scripts": {
     "precommit": "npm test",
-    "test": "eslint . && node test.js"
+    "test": "eslint . && jest"
   },
   "dependencies": {
     "spellchecker": "~3.4"
@@ -24,6 +24,10 @@
   "devDependencies": {
     "eslint": "~4.15",
     "husky": "~0.14",
+    "jest": "~22.1",
     "markdown-it": "~8.4"
+  },
+  "jest": {
+    "collectCoverage": true
   }
 }
