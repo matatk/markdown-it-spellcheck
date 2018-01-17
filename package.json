@@ -16,6 +16,7 @@
   "main": "index.js",
   "scripts": {
     "precommit": "npm test",
+    "example": "node example.js -fd",
     "test": "eslint . && jest"
   },
   "dependencies": {
@@ -25,7 +26,8 @@
     "eslint": "~4.15",
     "husky": "~0.14",
     "jest": "~22.1",
-    "markdown-it": "~8.4"
+    "markdown-it": "~8.4",
+    "yargs": "~10.1"
   },
   "jest": {
     "collectCoverage": true
