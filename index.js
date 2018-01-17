@@ -93,8 +93,10 @@ module.exports = (md, options) => {
 
 	checkOptions(options)
 
-	const filter = options.hasOwnProperty('filter') ? options.filter : null
-	const log = options.hasOwnProperty('log') ? options.log : () => {}
+	const log = options.hasOwnProperty('log') && options.log ?
+		options.log : () => {}
+	const filter = options.hasOwnProperty('filter') ?
+		options.filter : null
 	const validWords = options.hasOwnProperty('validWords') ?
 		options.validWords : []
 	const warnWords = options.hasOwnProperty('warnWords') ?

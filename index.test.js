@@ -14,7 +14,6 @@ describe('options-checking', () => {
 	})
 
 	it('throws when no errors callback is specified', () => {
-		console.log('no errors')
 		expect(() => {
 			require('markdown-it')().use(require('./'), {
 				warnings: () => {}
@@ -192,5 +191,22 @@ describe('spell-checking', () => {
 		expect(errorsMock.mock.calls.length).toBe(1)
 		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
 		expect(warningsMock.mock.calls.length).toBe(0)
+	})
+})
+
+describe('filtering', () => {
+	it('filters text', () => {
+		const errorsMock = jest.fn()
+		const warningsMock = jest.fn()
+		const filter = (text) => text.replace(/rite/, ' correctly')
+		const md = require('markdown-it')().use(require('./'), {
+			errors: errorsMock,
+			warnings: warningsMock,
+			filter: filter
+		})
+		// TODO: decide if this should be true
+		// expect(md.render('# Spellrite')).toBe('<h1>Spell correctly</h1>\n')
+		md.render('# Spellrite')
+		expect(errorsMock.mock.calls.length).toBe(0)
 	})
 })
