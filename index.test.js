@@ -58,6 +58,24 @@ describe('options-checking', () => {
 			})
 		}).not.toThrow()
 	})
+
+	it('throws if options.filter is not a function', () => {
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				filter: 42
+			})
+		}).toThrow(Error('Filter callback is not a function.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				filter: () => {}
+			})
+		}).not.toThrow()
+	})
 })
 
 describe('basic functionality', () => {

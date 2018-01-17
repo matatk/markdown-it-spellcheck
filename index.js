@@ -10,12 +10,18 @@ function checkOptions(options) {
 		throw Error('Non-object options specified.')
 	}
 
-	for (const option of ['errors', 'warnings']) {
+	const optionsRequired = {
+		'errors': true,
+		'warnings': true,
+		'filter': false
+	}
+
+	for (const option in optionsRequired) {
 		if (options.hasOwnProperty(option)) {
 			if (typeof options[option] !== 'function') {
 				throw Error(`${capitaliseFirst(option)} callback is not a function.`)
 			}
-		} else {
+		} else if (optionsRequired[option]) {
 			throw Error(`No ${option} callback specified.`)
 		}
 	}
