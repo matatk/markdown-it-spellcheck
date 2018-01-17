@@ -14,6 +14,7 @@ describe('options-checking', () => {
 	})
 
 	it('throws when no errors callback is specified', () => {
+		console.log('no errors')
 		expect(() => {
 			require('markdown-it')().use(require('./'), {
 				warnings: () => {}
@@ -57,14 +58,22 @@ describe('options-checking', () => {
 		}).not.toThrow()
 	})
 
-	it('throws if options.log is not a function', () => {
+	it('throws if options.log is neither null nor a function', () => {
 		expect(() => {
 			require('markdown-it')().use(require('./'), {
 				errors: () => {},
 				warnings: () => {},
 				log: 42
 			})
-		}).toThrow(Error('Log callback is not a function.'))
+		}).toThrow(Error('Log callback is neither null nor a function.'))
+
+		expect(() => {
+			require('markdown-it')().use(require('./'), {
+				errors: () => {},
+				warnings: () => {},
+				log: null
+			})
+		}).not.toThrow()
 
 		expect(() => {
 			require('markdown-it')().use(require('./'), {

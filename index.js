@@ -11,6 +11,7 @@ function checkOptions(options) {
 	}
 
 	const optionsRequired = {
+		// Which options must be present?
 		'errors': true,
 		'warnings': true,
 		'log': false,
@@ -19,8 +20,15 @@ function checkOptions(options) {
 
 	for (const option in optionsRequired) {
 		if (options.hasOwnProperty(option)) {
-			if (typeof options[option] !== 'function') {
-				throw Error(`${capitaliseFirst(option)} callback is not a function.`)
+			// Everything other than options.log must be a function if present;
+			// options.log can be null or a function (so it's easy to set
+			// declaratively in the options object when the plugin is loaded).
+			if (option !== 'log'
+				&& typeof options[option] !== 'function') {
+				throw Error(`${capitalise(option)} callback is not a function.`)
+			} else if (option === 'log'
+				&& options.log !== null && typeof options.log !== 'function') {
+				throw Error('Log callback is neither null nor a function.')
 			}
 		} else if (optionsRequired[option]) {
 			throw Error(`No ${option} callback specified.`)
@@ -39,7 +47,7 @@ function checkOptions(options) {
 }
 
 
-function capitaliseFirst(string) {
+function capitalise(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
