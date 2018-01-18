@@ -1,4 +1,10 @@
 'use strict'
+const fs = require('fs')
+const path = require('path')
+
+function getFixture(name) {
+	return fs.readFileSync(path.join('fixtures', name)).toString()
+}
 
 describe('options-checking', () => {
 	it('throws when no options are specified', () => {
@@ -237,5 +243,32 @@ describe('valid words and warning words', () => {
 		expect(errorsMock.mock.calls.length).toBe(0)
 		expect(warningsMock.mock.calls.length).toBe(1)
 		expect(warningsMock.mock.calls[0][0]).toEqual(['Spellrite'])
+	})
+})
+
+describe('ignoring code', () => {
+	let md
+	let errorsMock
+	let warningsMock
+
+	beforeEach(() => {
+		errorsMock = jest.fn()
+		warningsMock = jest.fn()
+		md = require('markdown-it')().use(require('./'), {
+			errors: errorsMock,
+			warnings: warningsMock
+		})
+	})
+
+	it('ignores `code` spans', () => {
+		md.render('Surround incorrect `Spellrite` in a code span.')
+		expect(errorsMock.mock.calls.length).toBe(0)
+		expect(warningsMock.mock.calls.length).toBe(0)
+	})
+
+	it('ignores fenced code blocks', () => {
+		md.render(getFixture('ignore-within-fenced.md'))
+		expect(errorsMock.mock.calls.length).toBe(0)
+		expect(warningsMock.mock.calls.length).toBe(0)
 	})
 })

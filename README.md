@@ -9,8 +9,6 @@ It works by hooking into the rendering process of markdown-it, and gives you cal
 
 You'll need to provide the code for those callbacks; the use-case envisaged is that your test suite checks spellings and can fail a build if errors are found.
 
-**Note:** this does **not** yet check HTML blocks (which you may be using if you prefer to do tables in HTML rather than the visual markdown syntax, for example), but this is a planned feature.  It **does** check inline HTML already.
-
 Refer to [example.js](example.js) (and [example.md](example.md)) for a real-world example.
 
 ```javascript
@@ -27,6 +25,12 @@ const md = require('markdown-it')()
 
 md.render(fs.readFileSync('a-markdown-file.md').toString())
 ```
+
+Notes
+-----
+
+* The contents of inline code spans and fenced code blocks are not checked.
+* this does **not** yet check HTML blocks (which you may be using if you prefer to do tables in HTML rather than the visual markdown syntax, for example), but this is a planned feature.  It **does** check inline HTML already.
 
 Options
 -------
