@@ -272,3 +272,35 @@ describe('ignoring code', () => {
 		expect(warningsMock.mock.calls.length).toBe(0)
 	})
 })
+
+describe('checking HTML', () => {
+	let md
+	let errorsMock
+	let warningsMock
+
+	beforeEach(() => {
+		errorsMock = jest.fn()
+		warningsMock = jest.fn()
+		md = require('markdown-it')({ html: true }).use(require('./'), {
+			errors: errorsMock,
+			warnings: warningsMock
+		})
+	})
+
+	// TODO this needs to check attributes of the tags? And note that the thing
+	// inside the tag is NOT part of the inline HTML as far as markdown-it is
+	// concerned.
+	it('checks inline HTML', () => {
+		md.render('Some inline <span>Spellrite</span> HTML.')
+		expect(errorsMock.mock.calls.length).toBe(1)
+		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
+		expect(warningsMock.mock.calls.length).toBe(0)
+	})
+
+	it('checks HTML blocks', () => {
+		md.render(getFixture('html-block.md'))
+		expect(errorsMock.mock.calls.length).toBe(1)
+		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
+		expect(warningsMock.mock.calls.length).toBe(0)
+	})
+})

@@ -13,7 +13,7 @@ Refer to [example.js](example.js) (and [example.md](example.md)) for a real-worl
 
 ```javascript
 const fs = require('fs')
-const md = require('markdown-it')()
+const md = require('markdown-it')()  // { html: true } to check HTML blocks
 	.use(require('markdown-it-spellcheck'), {
 		errors: (errors) => {
 			console.log(`Errors: ${errors}`)
@@ -30,7 +30,7 @@ Notes
 -----
 
 * The contents of inline code spans and fenced code blocks are not checked.
-* this does **not** yet check HTML blocks (which you may be using if you prefer to do tables in HTML rather than the visual markdown syntax, for example), but this is a planned feature.  It **does** check inline HTML already.
+* If you have HTML blocks (e.g. if you prefer doing tables with HTML syntax rather than markdown's) then this will also check those, but you need to set markdown-it's "html" option to `true`.
 
 Options
 -------
