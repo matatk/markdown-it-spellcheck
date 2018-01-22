@@ -24,7 +24,7 @@
     "spellchecker": "~3.4"
   },
   "devDependencies": {
-    "eslint": "~4.15",
+    "eslint": "~4.16",
     "husky": "~0.14",
     "jest": "~22.1",
     "markdown-it": "~8.4",
