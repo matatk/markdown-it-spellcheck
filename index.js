@@ -144,7 +144,7 @@ module.exports = (md, options) => {
 	md.renderer.rules.html_block = (tokens, idx, options, env, self) => {
 		const html = tokens[idx].content
 		if (html) {
-			check(hte(html))
+			check(hte(html, true))
 		}
 
 		return defaultRendererHtmlBlock(tokens, idx, options, env, self)

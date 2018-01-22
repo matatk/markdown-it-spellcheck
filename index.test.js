@@ -290,6 +290,7 @@ describe('checking HTML', () => {
 	// TODO this needs to check attributes of the tags? And note that the thing
 	// inside the tag is NOT part of the inline HTML as far as markdown-it is
 	// concerned.
+
 	it('checks inline HTML', () => {
 		md.render('Some inline <span>Spellrite</span> HTML.')
 		expect(errorsMock.mock.calls.length).toBe(1)
@@ -297,10 +298,22 @@ describe('checking HTML', () => {
 		expect(warningsMock.mock.calls.length).toBe(0)
 	})
 
+	it('ignores HTML tag names that are not words', () => {
+		md.render('Use the <kbd>Tab</kbd> key.')
+		expect(errorsMock.mock.calls.length).toBe(0)
+		expect(warningsMock.mock.calls.length).toBe(0)
+	})
+
 	it('checks HTML blocks', () => {
 		md.render(getFixture('html-block.md'))
 		expect(errorsMock.mock.calls.length).toBe(1)
 		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
+		expect(warningsMock.mock.calls.length).toBe(0)
+	})
+
+	it('ignores the content of <code> elements in blocks', () => {
+		md.render(getFixture('html-block-with-code.md'))
+		expect(errorsMock.mock.calls.length).toBe(0)
 		expect(warningsMock.mock.calls.length).toBe(0)
 	})
 })
