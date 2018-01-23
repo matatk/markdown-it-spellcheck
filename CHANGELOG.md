@@ -9,5 +9,5 @@ Change Log
 
 * First proper/usable release.
 * API uses callbacks (instead of throwing errors).
-* Tests (done TDD-style from the ground up; near-full coverage).
+* Tests (done [TDD](https://en.wikipedia.org/wiki/Test-driven_development)-style from the ground up; near-full coverage).
 * Documentation
