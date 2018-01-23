@@ -291,8 +291,8 @@ describe('checking HTML', () => {
 	// inside the tag is NOT part of the inline HTML as far as markdown-it is
 	// concerned.
 
-	it('checks inline HTML', () => {
-		md.render('Some inline <span>Spellrite</span> HTML.')
+	it('checks in-line HTML', () => {  // 'inline' errors on Travis
+		md.render('Some in-line <span>Spellrite</span> HTML.')
 		expect(errorsMock.mock.calls.length).toBe(1)
 		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
 		expect(warningsMock.mock.calls.length).toBe(0)
