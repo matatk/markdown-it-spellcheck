@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-spellcheck",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Check spelling in markdown files (markdown-it plugin)",
   "keywords": [
@@ -20,10 +20,11 @@
     "test": "eslint . && jest"
   },
   "dependencies": {
+    "html-text-extract": "github:matatk/html-text-extract#0.1.0",
     "spellchecker": "~3.4"
   },
   "devDependencies": {
-    "eslint": "~4.15",
+    "eslint": "~4.16",
     "husky": "~0.14",
     "jest": "~22.1",
     "markdown-it": "~8.4",

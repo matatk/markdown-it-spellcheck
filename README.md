@@ -13,7 +13,7 @@ Refer to [example.js](example.js) (and [example.md](example.md)) for a real-worl
 
 ```javascript
 const fs = require('fs')
-const md = require('markdown-it')()
+const md = require('markdown-it')()  // { html: true } if you use HTML blocks/inline
 	.use(require('markdown-it-spellcheck'), {
 		errors: (errors) => {
 			console.log(`Errors: ${errors}`)
@@ -29,8 +29,10 @@ md.render(fs.readFileSync('a-markdown-file.md').toString())
 Notes
 -----
 
-* The contents of inline code spans and fenced code blocks are not checked.
-* this does **not** yet check HTML blocks (which you may be using if you prefer to do tables in HTML rather than the visual markdown syntax, for example), but this is a planned feature.  It **does** check inline HTML already.
+* The contents of `inline code` and fenced/indented code blocks are not checked.
+* If you are using inline HTML, or HTML blocks (e.g. if you prefer doing tables with HTML syntax rather than markdown's), you need to set markdown-it's "html" option to `true` so that the structure of the HTML is interpreted correctly.
+* The contents of inline HTML tags are checked as if they were part of the body text (e.g. in `One fish, <span>two</span> fish`, the word "two" is treated as part of the document's text).
+* HTML `<code>` elements are not checked, in line with the behaviour for markdown code blocks.
 
 Options
 -------
@@ -57,6 +59,8 @@ Callback taking a single parameter: a debug/log message to output.
 
 You can set this to `null` too, which allows you to easily make this setting mirror a "debug" option in your spell-checking program (as is done in [example.js](example.js)).
 
+**Default value:** `null`
+
 #### validWords
 
 An array containing words that are to be treated as valid.
@@ -65,17 +69,23 @@ They will be added to the Hunspell custom dictionary. On most platforms, this is
 
 There's [a GitHub issue on spellchecker](https://github.com/atom/node-spellchecker/issues/22) relating to this.
 
+**Default value:** `[]`
+
 #### warnWords
 
 An array containing words that are to be treated as valid, but will trigger a warning when used.
 
 This is not persistent on any platform.
 
+**Default value:** `[]`
+
 #### filter
 
 A callback that is used to process some text before it's passed to the spellchecker.  The "text" here means each text token from the markdown-it renderer, so this could be a paragraph, sentence, list item, or text within an inline HTML block.
 
 Consult [example.js](example.js) and [example.md](example.md) for an example of how a filter can be used.
+
+**Default value:** `null`
 
 Development
 -----------

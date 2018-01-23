@@ -1,5 +1,6 @@
 'use strict'
 const SpellChecker = require('spellchecker')
+const hte = require('html-text-extract')
 
 function checkOptions(options) {
 	if (options === undefined) {
@@ -143,7 +144,7 @@ module.exports = (md, options) => {
 	md.renderer.rules.html_block = (tokens, idx, options, env, self) => {
 		const html = tokens[idx].content
 		if (html) {
-			log(`HTML block: ${html}`)
+			check(hte(html, true))
 		}
 
 		return defaultRendererHtmlBlock(tokens, idx, options, env, self)
