@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+## [0.3.0](https://github.com/matatk/markdown-it-spellcheck/compare/0.2.0...0.3.0) (2018-01-24)
+
+* Use factored-out [core-text-spellcheck](https://github.com/matatk/core-text-spellcheck) package (which, amongst other things, allows the word lists to be given as empty arrays, in order to make reacting to user settings easier when passing through options).
+* Bump dependencies.
+
 ## [0.2.0](https://github.com/matatk/markdown-it-spellcheck/compare/0.1.0...0.2.0) (2018-01-23)
 
 * Supports checking within HTML blocks (via [html-text-extract](https://github.com/matatk/html-text-extract)).

@@ -16,10 +16,10 @@ const fs = require('fs')
 const md = require('markdown-it')()  // { html: true } if you use HTML blocks/inline
 	.use(require('markdown-it-spellcheck'), {
 		errors: (errors) => {
-			console.log(`Errors: ${errors}`)
+			console.log(`Errors: ${errors.join(', ')}`)
 		},
 		warnings: (warnings) => {
-			console.log(`Warnings: ${warnings}`)
+			console.log(`Warnings: ${warnings.join(', ')}`)
 		}
 	})
 
@@ -37,47 +37,9 @@ Notes
 Options
 -------
 
-### Required
+Refer to the [core-text-spellcheck options](https://github.com/matatk/core-text-spellcheck#options).
 
-#### errors
-
-Callback taking a single parameter: an array of errant words that are being flagged as errors.
-
-(It's recommended that when errors are encountered, they would make the overall spell-check fail.)
-
-#### warnings
-
-Callback taking a single parameter: an array of errant words that are being flagged as warnings.
-
-(You might want to flag some things as warnings if they might be valid in certain situations, such as incorrect spellings that may be used as proper nouns in some cases.)
-
-### Optional
-
-#### log
-
-Callback taking a single parameter: a debug/log message to output.
-
-You can set this to `null` too, which allows you to easily make this setting mirror a "debug" option in your spell-checking program (as is done in [example.js](example.js)).
-
-**Default value:** `null`
-
-#### validWords
-
-An array containing words that are to be treated as valid.
-
-They will be added to the Hunspell custom dictionary. On most platforms, this is not persistent, but on macOS it is (in `~/Library/Spelling/[language-code]`).
-
-There's [a GitHub issue on spellchecker](https://github.com/atom/node-spellchecker/issues/22) relating to this.
-
-**Default value:** `[]`
-
-#### warnWords
-
-An array containing words that are to be treated as valid, but will trigger a warning when used.
-
-This is not persistent on any platform.
-
-**Default value:** `[]`
+There is some extra information regarding the "filter" option...
 
 #### filter
 
