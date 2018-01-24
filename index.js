@@ -4,6 +4,7 @@ const hte = require('html-text-extract')
 module.exports = (md, options) => {
 	const sc = require('core-text-spellcheck')(options)
 
+
 	// Markdown spell-checking bits...
 
 	const defaultRendererImage = md.renderer.rules.image
@@ -47,8 +48,7 @@ module.exports = (md, options) => {
 		//       * </kbd> - inline HTML
 		const html = tokens[idx].content
 		if (html) {
-			// sc.log(`HTML inline: ${html}`)
-			console.log(`HTML inline: ${html}`)
+			// console.log(`HTML inline: ${html}`)
 		}
 
 		return defaultRendererHtmlInline(tokens, idx, options, env, self)
