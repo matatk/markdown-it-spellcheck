@@ -20,7 +20,7 @@
     "test": "eslint . && jest"
   },
   "dependencies": {
-    "core-text-spellcheck": "github:matatk/core-text-spellcheck#0.2.0",
+    "core-text-spellcheck": "github:matatk/core-text-spellcheck#0.3.0",
     "html-text-extract": "github:matatk/html-text-extract#0.1.1"
   },
   "devDependencies": {

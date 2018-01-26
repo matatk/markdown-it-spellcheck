@@ -3,6 +3,7 @@ Change Log
 
 ## [0.3.1](https://github.com/matatk/markdown-it-spellcheck/compare/0.3.0...0.3.1) (2018-01-26)
 
+* Use latest [core-text-spellcheck](https://github.com/matatk/core-text-spellcheck/tree/0.3.0) (0.3.0) API.
 * Do not depend on [yargs](http://yargs.js.org) for the example (there is [markdown-spellcheck-cli](https://github.com/matatk/markdown-spellcheck-cli) for that now).
 * Update README with links to the CLI tool and fill in placeholders for the possible options in the "hello, world" example.
 
