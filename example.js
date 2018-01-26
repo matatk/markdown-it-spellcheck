@@ -2,23 +2,8 @@
 const fs = require('fs')
 const markdownit = require('markdown-it')
 
-const argv = require('yargs')
-	.usage('Usage: $0 [options]')
-	.boolean('filenames')
-	.describe('filenames', 'List files being checked')
-	.alias('f', 'filenames')
-	.boolean('debug')
-	.describe('debug', 'Show debugging info')
-	.alias('d', 'debug')
-	.help()
-	.alias('h', 'help')
-	.argv
-
 function findErrorsInFile(md, fileName) {
-	if (argv.filenames) {
-		console.log(`Checking file: "${fileName}"...`)
-	}
-
+	console.log(`Checking file: "${fileName}"...`)
 	md.render(fs.readFileSync(fileName).toString())
 }
 
@@ -29,7 +14,9 @@ function main() {
 
 	const md = markdownit({ html: true })
 		.use(require('./'), {
-			log: argv.debug ? console.log : null,
+			log: (info) => {
+				console.log(`Info: ${info}`)
+			},
 			errors: (errors) => {
 				console.log(`Error: ${currentFile}: ${errors.join(', ')}`)
 				foundErrors++
