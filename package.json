@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-spellcheck",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Check spelling in markdown files (markdown-it plugin)",
   "keywords": [
@@ -16,7 +16,7 @@
   "main": "index.js",
   "scripts": {
     "precommit": "npm test",
-    "example": "node example.js -fd",
+    "example": "node example.js",
     "test": "eslint . && jest"
   },
   "dependencies": {
@@ -27,8 +27,7 @@
     "eslint": "~4.16",
     "husky": "~0.14",
     "jest": "~22.1",
-    "markdown-it": "~8.4",
-    "yargs": "~11.0"
+    "markdown-it": "~8.4"
   },
   "jest": {
     "collectCoverage": true

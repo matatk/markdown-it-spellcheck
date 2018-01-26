@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+## [0.3.1](https://github.com/matatk/markdown-it-spellcheck/compare/0.3.0...0.3.1) (2018-01-26)
+
+* Do not depend on [yargs](http://yargs.js.org) for the example (there is [markdown-spellcheck-cli](https://github.com/matatk/markdown-spellcheck-cli) for that now).
+* Update README with links to the CLI tool and fill in placeholders for the possible options in the "hello, world" example.
+
 ## [0.3.0](https://github.com/matatk/markdown-it-spellcheck/compare/0.2.0...0.3.0) (2018-01-24)
 
 * Use factored-out [core-text-spellcheck](https://github.com/matatk/core-text-spellcheck) package (which, amongst other things, allows the word lists to be given as empty arrays, in order to make reacting to user settings easier when passing through options).
